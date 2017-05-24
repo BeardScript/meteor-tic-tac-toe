@@ -1,0 +1,44 @@
+/* CSS declarations go here */
+table
+{
+	margin: auto;
+	font-family: arial;
+}
+
+#ui
+{
+	text-align: center;
+}
+
+#play-btn
+{
+	width: 100px;
+	height: 50px;
+	font-size: 25px;
+}
+
+.mark
+{
+	text-align: center;
+	font-size: 150px;
+	overflow: hidden;
+	padding: 0px;
+	margin: 0px;
+}
+
+.selectableField
+{
+	text-align: center;
+	height: 200px;
+	width: 200px;
+	padding: 0px;
+	margin: 0px;
+}
+
+td
+{
+	height: 200px;
+	width: 200px;
+	background-color: lightgrey;
+	overflow: hidden;
+}
