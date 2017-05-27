@@ -13,7 +13,7 @@ Template.board.events({
 Template.board.helpers({
 	sideLength:function()
 	{
-		var side = new Array(3);
+		let side = new Array(3);
 		side.fill(0);
 
 		return side;
@@ -22,11 +22,11 @@ Template.board.helpers({
 	{
 		if(Session.get("inGame"))
 		{
-			var myGame = Games.findOne();
+			let myGame = Games.findOne();
 
 			if(myGame !== undefined && myGame.status !== "waiting")
 			{
-				for(var i = 0; i < myGame.moves.length; i++)
+				for(let i = 0; i < myGame.moves.length; i++)
 				{
 					if(myGame.moves[i].move === x + '' + y)
 					{

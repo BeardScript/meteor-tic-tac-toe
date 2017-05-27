@@ -27,7 +27,7 @@ Template.ui.helpers({
 	{
 		if(Session.get("inGame"))
 		{
-			var myGame = Games.findOne();
+			let myGame = Games.findOne();
 			
 			if(myGame.status === "waiting")
 				return "Looking for an opponent...";
