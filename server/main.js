@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor';
+import { UserStatus } from 'meteor/mizzao:user-status';
+import { gameLogic } from '../lib/gameLogic.js';
 
 Meteor.startup(() => {
 	// Uncomment the next line to wipe database.
@@ -7,7 +9,7 @@ Meteor.startup(() => {
 
 UserStatus.events.on("connectionLogout", function(fields)
 {
-	var game = Games.findOne(
+	const game = Games.findOne(
 	{$or:[
 		{player1: fields.userId},
 		{player2: fields.userId}]
@@ -15,55 +17,33 @@ UserStatus.events.on("connectionLogout", function(fields)
 
 	if(game != undefined)
 	{
-		if(game.status != "waiting" && game.status != "end")
+		if(game.status !== "waiting" && game.status !== "end")
 		{
-			if(game.player1 == fields.userId)
+			if(game.player1 === fields.userId)
 			{
-				SetWinner(game._id, game.player2);
+				gameLogic.setGameResult(game._id, game.player2);
 			}
-			else if(game.player2 == fields.userId)
+			else if(game.player2 === fields.userId)
 			{
-				SetWinner(game._id, game.player1);
+				gameLogic.setGameResult(game._id, game.player1);
 			}
 		}
 		else
 		{
-			if(game.player1 == "" || game.player2 == "")
+			if(game.player1 === "" || game.player2 === "")
 			{
-				Games.remove(
-					{$and:[
-					{$or:[
-						{player1: fields.userId},
-						{player2: fields.userId}]
-					},
-					{$or:[
-						{status: "waiting"},
-						{status: "end"}]
-					}
-				]});
+				gameLogic.removeGame(game._id);
 			}
 			else
 			{
-				if(game.player1 == fields.userId)
-					Games.update({player1: fields.userId}, {$set:{player1: ""}});
-				else if(game.player2 == fields.userId)
-					Games.update({player2: fields.userId}, {$set:{player2: ""}});
+				if(game.player1 === fields.userId)
+					gameLogic.removePlayer(game._id, "player1");
+				else if(game.player2 === fields.userId)
+					gameLogic.removePlayer(game._id, "player2");
 			}
 		}	
 	}
 });
-
-function SetWinner(gameID, player)
-{
-	Games.update(
-	{_id: gameID},
-		{$set:{
-			"won": player,
-			"status": "end"
-			}
-		}
-	);
-}
 
 Meteor.publish('Games', function gamesPublication()
 {
